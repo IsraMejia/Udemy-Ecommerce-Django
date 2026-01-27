@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+def checkout():
+    pass
 
 def payment_success(request):
     return render(request, 'payment/payment-success.html')
