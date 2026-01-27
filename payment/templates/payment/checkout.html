@@ -1,152 +1,234 @@
-
 {% include "store/base.html" %}
-
-
 {% load static %}
-
 
 {% block content %}
 
 <style>
-    
-    body 
-    {
-        
-        background-color: gray;
-    
-    }
+  /* --- Estilos Modo Oscuro Moderno --- */
+  
+  /* Fondo general de la página */
+  body {
+    background-color: #121212 !important; /* Negro suave */
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
+  /* Ajuste para centrar el contenido verticalmente si la pantalla es grande */
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+
+  /* Tarjeta del formulario */
+  .dark-card {
+    background-color: #1e1e1e; /* Gris oscuro mate */
+    border: 1px solid #333;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra profunda */
+  }
+
+  /* Títulos e iconos */
+  h3 {
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  
+  .icon-accent {
+    color: #3b82f6; /* Azul moderno para el icono */
+  }
+
+  hr {
+    border-color: #444;
+    opacity: 0.5;
+  }
+
+  /* Inputs personalizados Dark Mode */
+  .form-control {
+    background-color: #2c2c2c;
+    border: 1px solid #404040;
+    color: #fff; /* Texto blanco al escribir */
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    background-color: #333;
+    border-color: #3b82f6; /* Borde azul al enfocar */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Glow azul suave */
+    color: #fff;
+  }
+
+  /* Color del placeholder para que se lea bien en oscuro */
+  .form-control::placeholder {
+    color: #888;
+  }
+
+  /* Labels (Etiquetas) */
+  .form-label {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  /* Botón */
+  .btn-submit {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    padding: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform 0.2s;
+  }
+  
+  .btn-submit:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px); /* Efecto sutil de elevación */
+  }
 
 </style>
 
-
-    <body>
-
-        <br>
-
-        <div class="container bg-white shadow-md p-5" style="width:500px; border-radius:20px;">
-
-            <form id="form">
-
-                <div>
-
-                    <h3> <i class="fa fa-chevron-circle-right" aria-hidden="true"></i> &nbsp; Complete your order </h3>
-
-                    <p> Please enter in the relevant information below. </p>
- 
-
-
-                    <hr>
-
-                    <br>
-
-                    <div class="form-field">
-                    
-                        <input class="form-control validate" id="name" type="text" placeholder="Full name*" autocomplete="off" value="" required>
-
-                    </div>
-
-
-                    <br>
-
-
-                    <div class="form-field">
-
-                        <input class="form-control validate" id="email" type="email" placeholder="Email address*" autocomplete="off" value="" required>
-
-                    </div>
-
-                    
-                    <br>
-
-                    
-                    <div class="form-field">
-
-                        <input class="form-control validate" id="address1" type="text" placeholder="Address 1*" autocomplete="off" value="" required>
-
-                    </div>
-
-
-                    <br>
-
-
-                    <div class="form-field">
-
-                        <input class="form-control validate" id="address2" type="text" placeholder="Address 2*" autocomplete="off" value="" required>
-
-                    </div>
-
-
-                    <br>
-
-
-                    <div class="form-field">
-
-                        <input class="form-control validate" id="city" type="text" placeholder="City*" autocomplete="off" value="" required>
-
-                    </div>
-
-
-                    <br>
-
-
-                    <div class="form-field">
-
-                        <input class="form-control" id="state" type="text" placeholder="State (Optional)" autocomplete="off" value="">
-
-                    </div>
-
-
-                    <br>
-
-
-                    <div class="form-field">
-
-                        <input class="form-control" id="zipcode" type="text" placeholder="Zip code (Optional)" autocomplete="off" value="">
-
-                    </div>
-            
-                </div>
-
-                <br>
-
-
-
-               <button id="complete-order" type="submit" class="btn btn-primary navbar-btn text-white"> &nbsp; Complete order </button>
-               
-
-                <br>
-
-
-
-
-            </form>
-
-
-        </div>
-
+<div class="content-wrapper">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8">
         
+        <div class="dark-card p-4 p-md-5">
+          <form id="form">
+            
+            <div class="mb-4">
+              <h3>
+                <i class="fa fa-chevron-circle-right icon-accent" aria-hidden="true"></i> &nbsp;
+                Complete your order
+              </h3>
+              <p class="text-secondary">Please enter in the relevant information below.</p>
+            </div>
 
-        <br>
+            <hr class="mb-4" />
 
+            <div class="row g-3 mb-3">
+              <div class="col-12 col-md-6">
+                <label for="name" class="form-label">Full Name</label>
+                <input
+                  class="form-control validate"
+                  id="name"
+                  type="text"
+                  placeholder="e.g. John Doe"
+                  autocomplete="off"
+                  value="{{shipping.full_name}}"
+                  required
+                />
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                  class="form-control validate"
+                  id="email"
+                  type="email"
+                  placeholder="e.g. john@email.com"
+                  autocomplete="off"
+                  value="{{shipping.email}}"
+                  required
+                />
+              </div>
+            </div>
 
-    </body>
+            <div class="mb-3">
+              <label for="address1" class="form-label">Address 1</label>
+              <input
+                class="form-control validate"
+                id="address1"
+                type="text"
+                placeholder="Street address, P.O. box"
+                autocomplete="off"
+                value="{{shipping.address1}}"
+                required
+              />
+            </div>
 
+            <div class="mb-3">
+              <label for="address2" class="form-label">Address 2</label>
+              <input
+                class="form-control validate"
+                id="address2"
+                type="text"
+                placeholder="Apartment, suite, unit, etc."
+                autocomplete="off"
+                value="{{shipping.address2}}"
+                required
+              />
+            </div>
 
-    <!-- Ajax integration -->
+            <div class="row g-3 mb-4">
+              <div class="col-12 col-md-5">
+                <label for="city" class="form-label">City</label>
+                <input
+                  class="form-control validate"
+                  id="city"
+                  type="text"
+                  placeholder="City"
+                  autocomplete="off"
+                  value="{{shipping.city}}"
+                  required
+                />
+              </div>
+              <div class="col-6 col-md-4">
+                <label for="state" class="form-label">State</label>
+                <input
+                  class="form-control"
+                  id="state"
+                  type="text"
+                  placeholder="State"
+                  value="{{shipping.state}}"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="col-6 col-md-3">
+                <label for="zipcode" class="form-label">Zip Code</label>
+                <input
+                  class="form-control"
+                  id="zipcode"
+                  type="text"
+                  placeholder="Zip"
+                  value="{{shipping.zipcode}}"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
 
-    
+            <button
+              id="complete-order"
+              type="submit"
+              class="btn btn-primary btn-submit w-100 text-white shadow"
+            >
+              Complete Order &nbsp; <i class="fa fa-arrow-right"></i>
+            </button>
 
-    <script>
+            <br />
+            <br />
+            <br />
+            <br />
 
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    
+<br>
 
-
-   </script>
-
-
-
-
+<script>
+    // Tu lógica original de JS funcionará perfectamente aquí
+    // ya que hemos mantenido todos los IDs (name, email, etc.)
+</script>
 
 {% endblock %}

@@ -1,119 +1,194 @@
 {% include "store/base.html" %} 
 {% load static %}
 {% load mathfilters %} 
+
 {% block content %}
 
+<style>
+    /* --- Estilos Modo Oscuro y Layout --- */
+    body {
+        background-color: #121212 !important;
+        color: #e0e0e0;
+        min-height: 100vh;
+    }
 
-<main class="pt-5">
+    h1, h2, h3, h4, h5, h6 {
+        color: #fff;
+    }
+
+    /* Tarjeta de Producto */
+    .cart-item-card {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cart-item-card:hover {
+        border-color: #444;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Imagen del producto */
+    .product-img-container {
+        background-color: #fff; /* Fondo blanco para que la imagen resalte si es PNG transp */
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 150px;
+    }
+
+    .product-img-container img {
+        max-height: 130px;
+        object-fit: contain;
+    }
+
+    /* Links y Textos */
+    a.product-link {
+        color: #fff;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    a.product-link:hover {
+        color: #3b82f6;
+    }
+
+    /* Selector de Cantidad Customizado para Dark Mode */
+    .form-select-dark {
+        background-color: #2c2c2c;
+        color: #fff;
+        border: 1px solid #444;
+        border-radius: 6px;
+        padding: 5px 10px;
+        width: 80px; /* Ancho fijo para prolijidad */
+        display: inline-block;
+    }
+    
+    .form-select-dark:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Precio y Total */
+    .price-tag {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #4ade80; /* Verde neón suave para dinero */
+    }
+
+    .total-display {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 12px;
+        display: inline-block;
+        min-width: 300px;
+    }
+</style>
+
+<main class="pt-5 pb-5">
   <div class="container">
-    <h1 class="h5">Shopping carts</h1>
+    
+    <div class="d-flex align-items-center mb-4">
+        <h1 class="h3 mb-0 fw-bold">Shopping Cart</h1>
+        <span class="badge bg-secondary ms-3 rounded-pill">{{ cart|length }} Items</span>
+    </div>
 
-    <hr />
+    <hr class="mb-5" style="border-color: #444; opacity: 0.5;">
 
-      {% for item in cart %}
-      {% with product=item.product%}
+    {% for item in cart %}
+    {% with product=item.product %}
 
-
-    <br />
-
-    <div class="row mb-4 border product-item">
-      <div class="col-md-3 col-lg-2 order-md-first bg-light">
-        <img
-          class="img-fluid mx-auto d-block"
-          width="200px"
-          alt="Responsive image"
-          src="{{product.image.url}}"
-        />
-        <!-- Product image -->
-      </div>
-
-      <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
-        <a href="{{product.get_absolute_url}}" class="text-decoration-none ">
-          <!-- Product get absolute url -->
-
-          <h1 class="h5 pt-2"> {{product.title}} </h1>
-        </a>
-
-        <div class="border">
-          <div class="col border-bottom">
-            <div class="row p-3">
-              <div class="col-6">Product</div>
-
-              <div class="col-6 text-end">
-                <span class="h6 fw-bold"
-                  >$ {{product.price|mul:item.qty}}
-                </span>
-              </div>
+    <div class="cart-item-card mb-4 p-3 shadow-sm">
+      <div class="row g-0">
+        
+        <div class="col-md-3 col-lg-2">
+            <div class="product-img-container">
+                <img
+                    class="img-fluid"
+                    alt="{{product.title}}"
+                    src="{{product.image.url}}"
+                />
             </div>
-          </div>
+        </div>
 
-          <div class="col">
-            <div class="row p-3">
-              <div class="col-12">
-                <label for="select">Qty</label>
-
-                &nbsp;
-
-                <select id="select{{product.id}}">
-                  <option selected>{{item.qty}}</option>
-
-                  <option value="">1</option>
-
-                  <option value="">2</option>
-
-                  <option value="">3</option>
-
-                  <option value="">4</option>
-                </select>
-
-                <br />
-                <br />
-
-                <button
-                  type="button"
-                  id="update-button"
-                  data-index = "{{product.id}}"
-                  class="btn btn-primary btn-sm update-button"
-                >
-                  Update
-                </button>
-
-                &nbsp;
-
-                <button
-                  type="button" 
-                  data-index = "{{product.id}}"
-                  class="btn btn-danger btn-sm delete-button"
-                >
-                  Delete
-                </button>
-
-
-              </div>
+        <div class="col-md-9 col-lg-10 ps-md-4 mt-3 mt-md-0 d-flex flex-column justify-content-between">
+            
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <a href="{{product.get_absolute_url}}" class="product-link">
+                        <h2 class="h5 fw-bold mb-1">{{product.title}}</h2>
+                    </a>
+                    <small class="text-secondary">Product ID: {{product.id}}</small>
+                </div>
+                <div class="text-end">
+                    <span class="d-block text-secondary small mb-1">Total Price</span>
+                    <span class="price-tag">$ {{product.price|mul:item.qty}}</span>
+                </div>
             </div>
-          </div>
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                
+                <div class="d-flex align-items-center mb-2 mb-sm-0">
+                    <label for="select{{product.id}}" class="me-2 text-secondary fw-bold small">Qty:</label>
+                    <select id="select{{product.id}}" class="form-select-dark">
+                        <option selected>{{item.qty}}</option>
+                        <option value="">1</option>
+                        <option value="">2</option>
+                        <option value="">3</option>
+                        <option value="">4</option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button
+                        type="button"
+                        data-index="{{product.id}}"
+                        class="btn btn-outline-primary btn-sm update-button d-flex align-items-center gap-1"
+                    >
+                        <i class="fa fa-refresh"></i> Update
+                    </button>
+
+                    <button
+                        type="button" 
+                        data-index="{{product.id}}"
+                        class="btn btn-outline-danger btn-sm delete-button d-flex align-items-center gap-1"
+                    >
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+
+            </div>
         </div>
       </div>
     </div>
-
     {% endwith %}
     {% endfor %}
 
-    <div class="col-12 text-end">
-      <div class="h6 fw-bold">
-        Sub total: $
-        <div id="total" class="d-inline-flex"> {{cart.get_total}} </div>
-      </div>
+    <div class="row mt-5">
+        <div class="col-12 text-end">
+            <div class="total-display shadow-lg text-center text-md-end">
+                <div class="h5 text-secondary mb-2">Subtotal</div>
+                <div class="display-6 fw-bold text-white mb-4">
+                    $ <span id="total">{{cart.get_total}}</span>
+                </div>
+                
+                <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow"> 
+                    Proceed to Checkout &nbsp; <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
     </div>
+
   </div>
-
-  <br>
-
-  </br>
 </main>
 
 <script>
-  //Delete Button
+  //Delete Button (Lógica Original Intacta)
     $(document).on('click', '.delete-button', function(e){
         e.preventDefault();
 
@@ -126,8 +201,7 @@
                 action: 'post'
             },
             success: function(json){
-                //console.log(json);
-                location.reload(true); //reload the page, in this way the deleted item isn't in the page
+                location.reload(true); 
                 document.getElementById("cart-qty").textContent = json.qty
                 document.getElementById("total").textContent = json.total
             },
@@ -136,8 +210,7 @@
         });
     });
 
-
-  //Update Button
+  //Update Button (Lógica Original Intacta)
     $(document).on('click', '.update-button', function(e){
         e.preventDefault();
 
@@ -153,8 +226,7 @@
                 action: 'post'
             },
             success: function(json){
-                //console.log(json);
-                location.reload(true); //reload the page, in this way the update item isn't in the page
+                location.reload(true); 
                 document.getElementById("cart-qty").textContent = json.qty
                 document.getElementById("total").textContent = json.total
             },
@@ -163,7 +235,5 @@
         });
     });
 </script>
-
-
 
 {% endblock %}
