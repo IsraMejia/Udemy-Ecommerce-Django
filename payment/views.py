@@ -16,6 +16,10 @@ def checkout(request):
     
     else : #Guess user 
         return render(request, 'payment/checkout.html')
+    
+
+def complete_order(request):
+    pass
 
 def payment_success(request):
     return render(request, 'payment/payment-success.html')

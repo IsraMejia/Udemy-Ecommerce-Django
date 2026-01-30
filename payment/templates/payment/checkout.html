@@ -227,8 +227,37 @@
 <br>
 
 <script>
-    // Tu lógica original de JS funcionará perfectamente aquí
-    // ya que hemos mantenido todos los IDs (name, email, etc.)
+    
+  // Complete Checkout
+  $(document).on('submit',   function(e){
+      e.preventDefault();
+
+      $.ajax({
+          type: "POST",
+          url: '{% url "complete-order" %}',
+          data: {
+              
+              name: $('#name').val(),
+              email:$('#email').val(),
+              address1: $('#address1').val(),
+              address2: $('#address2').val(),
+              city: $('#city').val(),
+              state: $('#state').val(),
+              zipcode: $('#zipcode').val(),
+              
+              csrfmiddlewaretoken: '{{csrf_token}}', 
+              action: 'post'
+          },
+          success: function(json){
+               
+          },
+          error: function(xhr, errmsg, err){
+              console.log(errmsg);
+          }
+      });
+  });
+
+
 </script>
 
 {% endblock %}
